@@ -1,10 +1,10 @@
-generator client {
+ generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -27,7 +27,7 @@ model Habit {
   description String?
   category    String
   frequency   Frequency  @default(DAILY)
-  targetDays  Int[]      @default([])
+  targetDays  String     @default("[]")  // JSON string for SQLite
   isActive    Boolean    @default(true)
   color       String     @default("#3B82F6")
   icon        String     @default("💪")
@@ -43,7 +43,7 @@ model Habit {
 
 model HabitRecord {
   id          String   @id @default(cuid())
-  date        DateTime @db.Date
+  date        DateTime
   completed   Boolean  @default(false)
   notes       String?
   createdAt   DateTime @default(now())
@@ -62,3 +62,4 @@ enum Frequency {
   WEEKLY
   MONTHLY
 }
+
