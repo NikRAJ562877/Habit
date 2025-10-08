@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  habits    Habit[]
+  records   HabitRecord[]
+  
+  @@map("users")
+}
+
+model Habit {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  frequency   Frequency  @default(DAILY)
+  targetDays  Int[]      @default([])
+  isActive    Boolean    @default(true)
+  color       String     @default("#3B82F6")
+  icon        String     @default("💪")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  records     HabitRecord[]
+  
+  @@map("habits")
+}
+
+model HabitRecord {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  completed   Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+  
+  habitId     String
+  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([habitId, date, userId])
+  @@map("habit_records")
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
