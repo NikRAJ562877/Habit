@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import HabitCard from '@/components/dashboard/HabitCard'
 import AIInsights from '@/components/dashboard/AIInsights'
 import DashboardHeader from '@/components/dashboard/DashboardHeader'
-import { Plus, TrendingUp, Target, Calendar } from 'lucide-react'
+import { Plus, TrendingUp, Target, Calendar as CalendarIcon } from 'lucide-react'
 import Link from 'next/link'
 import { HabitWithStats, HabitRecord } from '@/types'
+import Achievements from '@/components/dashboard/Achievements'
+import Calendar from '@/components/dashboard/Calendar'
 
 export default function Dashboard() {
   const [habits, setHabits] = useState<HabitWithStats[]>([])
@@ -95,7 +97,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Best Streak</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -110,7 +112,7 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">This Week</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -168,6 +170,8 @@ export default function Dashboard() {
 
         {/* AI Insights Sidebar */}
         <div className="space-y-6">
+          <Achievements />
+          <Calendar />
           <AIInsights />
         </div>
       </div>

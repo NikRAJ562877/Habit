@@ -140,6 +140,29 @@ export interface CalendarDay {
   }[]
 }
 
+// Achievement types
+export interface Achievement {
+  id: string
+  key: string
+  title: string
+  description?: string
+  icon?: string
+  color?: string
+  criteriaType: 'STREAK' | 'TOTAL_COMPLETIONS'
+  criteriaValue: number
+  createdAt: Date
+}
+
+export interface AchievementProgress {
+  id: string
+  userId: string
+  achievementId: string
+  progress: number
+  unlocked: boolean
+  unlockedAt?: Date | null
+  achievement?: Achievement
+}
+
 // Analytics types
 export interface HabitAnalytics {
   habitId: string

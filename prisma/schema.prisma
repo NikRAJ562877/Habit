@@ -1,4 +1,4 @@
- generator client {
+generator client {
   provider = "prisma-client-js"
 }
 
@@ -17,6 +17,7 @@ model User {
   
   habits    Habit[]
   records   HabitRecord[]
+  progress  AchievementProgress[]
   
   @@map("users")
 }
@@ -61,5 +62,40 @@ enum Frequency {
   DAILY
   WEEKLY
   MONTHLY
+}
+
+// Achievement system
+model Achievement {
+  id            String                @id @default(cuid())
+  key           String                @unique
+  title         String
+  description   String?
+  icon          String                @default("🏆")
+  color         String                @default("#F59E0B")
+  criteriaType  AchievementCriteriaType
+  criteriaValue Int
+  createdAt     DateTime              @default(now())
+  progress      AchievementProgress[]
+
+  @@map("achievements")
+}
+
+model AchievementProgress {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  progress      Int         @default(0)
+  unlocked      Boolean     @default(false)
+  unlockedAt    DateTime?
+
+  @@unique([userId, achievementId])
+  @@map("achievement_progress")
+}
+
+enum AchievementCriteriaType {
+  STREAK
+  TOTAL_COMPLETIONS
 }
 
